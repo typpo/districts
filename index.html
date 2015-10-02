@@ -71,7 +71,8 @@ function ready(error, us, congress) {
       .on("zoom", zoomed);
 
   var g = svg.append("g");
-  g.call(zoom)
+  g.call(zoom);
+
   g.attr("class", "districts")
     .attr("clip-path", "url(#clip-land)")
     .selectAll("path")
@@ -79,7 +80,7 @@ function ready(error, us, congress) {
     .enter().append("path")
       .attr("d", path)
     .append("title")
-      .text(function(d) { return d.id; });
+      .text(function(d) { console.log(d); return d.id; });
 
   g.append("path")
       .attr("class", "district-boundaries")
@@ -91,10 +92,12 @@ function ready(error, us, congress) {
       .datum(topojson.mesh(us, us.objects.states, function(a, b) { return a !== b; }))
       .attr("d", path);
 
+/*
   g.append("clipPath")
       .attr("id", "clip-land")
     .append("use")
       .attr("xlink:href", "#land");
+ */
 
   function zoomed() {
     projection.translate(d3.event.translate).scale(d3.event.scale);
