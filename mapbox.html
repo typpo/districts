@@ -28,18 +28,35 @@ var map = L.mapbox.map('map', 'mapbox.streets').setView([40, -80], 5);
 
 // Internally this function uses the TopoJSON library to decode the given file
 // into GeoJSON.
-var customLayer = L.geoJson(null, {
+
+var countyStyle = L.geoJson(null, {
     // http://leafletjs.com/reference.html#geojson-style
+    style: function(feature) {
+      return {
+        color: 'green' ,
+        weight: 0.8,
+        fill: false,
+      };
+    }
+});
+// Counties go first because districts overwrite them, maybe?
+var countiesLayer = omnivore.topojson('/us-counties.json', null, countyStyle)
+    .addTo(map);
+
+var congressStyle = L.geoJson(null, {
     style: function(feature) {
       return {
         color: 'blue' ,
         weight: 1,
-        fillOpacity: 0.1,
+        fill: false,
       };
     }
 });
-var usLayer = omnivore.topojson('/us-congress-113.json', null, customLayer)
+var congressLayer = omnivore.topojson('/us-congress-113.json', null, congressStyle)
     .addTo(map);
+
+// TODO more from http://www.census.gov/topics/population.html
+
 </script>
 </body>
 </html>
